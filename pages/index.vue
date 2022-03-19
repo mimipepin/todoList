@@ -43,21 +43,21 @@ export default {
             </v-btn>
         </form>
 
-        
-
-        <ul>
-            <li v-for="todo in todos" :key="todo.id">
-            {{ todo.text }}
-            <v-btn @click="removeTodo(todo)"
-                color="#8c1919"
-                elevation="2"
-                tile
-                icon
-            >
-                <v-icon>mdi-close-thick</v-icon>
-            </v-btn>
-            </li>
-        </ul>
+        <v-list>
+            <v-list-item-group max-width="1000">
+                <v-list-item v-for="item in todos" :key="item.id">
+                    <v-list-item-icon>
+                        <v-icon color="#8c1919" @click="removeTodo(item)">mdi-close-thick</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                        <v-list-item-title v-text="item.text"></v-list-item-title>
+                    </v-list-item-content>
+                    <v-list-item-action>
+                        <v-checkbox ></v-checkbox>
+                    </v-list-item-action>
+                </v-list-item>
+            </v-list-item-group>
+        </v-list>
     </div>
  </template>
 
@@ -65,18 +65,17 @@ export default {
     body {
         background-color: #ffc4c4;
         margin: 5em;
-    }
-
-    div {
-        align-items: center;
         display: flex;
         flex-direction: column;
+        align-items: center;
     }
-
+    
+    div {
+    }
+    
     form {
         display: flex;
         flex-direction: row;
-        justify-content: space-between;
         margin: 1em;
     }
 
@@ -88,6 +87,8 @@ export default {
     #addButton {
         margin-left: 2em;
     }
+
+
 
  </style>
  
