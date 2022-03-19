@@ -48,21 +48,26 @@ export default {
             </v-btn>
         </form>
 
-        <v-list>
-            <v-list-item-group max-width="1000">
-                <v-list-item v-for="item in filteredTodos" :key="item.id">
-                    <v-list-item-icon>
-                        <v-icon color="#8c1919" @click="removeTodo(item)">mdi-close-thick</v-icon>
-                    </v-list-item-icon>
-                    <v-list-item-content>
-                        <v-list-item-title> <span :class="{done: item.finished}">{{ item.text }}</span></v-list-item-title>
-                    </v-list-item-content>
-                    <v-list-item-action>
-                        <v-checkbox v-model="item.finished"></v-checkbox>
-                    </v-list-item-action>
-                </v-list-item>
-            </v-list-item-group>
-        </v-list>
+        <div v-if="filteredTodos.length > 0">
+            <v-list>
+                <v-list-item-group max-width="1000">
+                    <v-list-item v-for="item in filteredTodos" :key="item.id">
+                        <v-list-item-icon>
+                            <v-icon color="#8c1919" @click="removeTodo(item)">mdi-close-thick</v-icon>
+                        </v-list-item-icon>
+                        <v-list-item-content>
+                            <v-list-item-title @click="item.finished = !finished"> <span :class="{done: item.finished}">{{ item.text }}</span></v-list-item-title>
+                        </v-list-item-content>
+                        <v-list-item-action>
+                            <v-checkbox v-model="item.finished"></v-checkbox>
+                        </v-list-item-action>
+                    </v-list-item>
+                </v-list-item-group>
+            </v-list>
+        </div>
+        <div v-else>
+            <p id="noTasks">Congratulations, you completed all your tasks !</p>
+        </div>
          <div id="hideButton">  
             <v-btn
                 @click="hide = !hide"
@@ -104,6 +109,9 @@ export default {
         text-decoration: line-through;
     }
 
+    #noTasks {
+        color: #C70039;
+    }
 
     #hideButton {
         margin-top: 2em;
@@ -111,6 +119,7 @@ export default {
         flex-direction: column;
         align-items: center;
     }
+
 
  </style>
  
