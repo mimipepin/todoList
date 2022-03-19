@@ -1,3 +1,6 @@
+// enregistre pas à chaque modif donc faire un watcher je crois
+// empecher vide
+
 <script>
 let id = 0;
 export default {
@@ -9,23 +12,36 @@ export default {
     }
   },
   mounted() {
-      for(let i = 0; i < localStorage.length; i++) {
-          this.todos.push({text: localStorage.key(i), finished: localStorage.getItem(localStorage.key(i))})
-      }
+    Object.keys(localStorage).forEach(key => {
+        this.todos.push({text: key, finished: localStorage.getItem(key)})
+        console.log(localStorage.getItem(key))
+    });
   },
   computed: {
     filteredTodos() {
         return this.hide ? this.todos.filter((t) => !t.finished) : this.todos
     }
   },
+  watch: {
+      todos() {
+          this.save()
+      }
+  },
   methods: {
     addTodo() {
         this.todos.push({ id: id++, text: this.newTodo, finished:false})
-        localStorage.setItem(this.newTodo, false)
+        localStorage.setItem(JSON.stringify(this.newTodo), false)
         this.newTodo = ''
     },
     removeTodo(todo) {
         this.todos = this.todos.filter((t) => t !== todo)
+    },
+    save() {
+        localStorage.clear()
+        this.todos.forEach(elem => {
+            localStorage.setItem(elem.text, elem.finished)
+            console.log(localStorage.getItem(elem.text))
+        });
     }
   }
 }
@@ -33,6 +49,10 @@ export default {
 
 <template>
     <div>
+        <v-btn
+            icon>
+            <v-icon>mdi-delete</v-icon>
+        </v-btn>
         <h1>Todo List</h1>
         <form @submit.prevent="addTodo">
             <v-text-field v-model="newTodo"
@@ -56,7 +76,7 @@ export default {
                             <v-icon color="#8c1919" @click="removeTodo(item)">mdi-close-thick</v-icon>
                         </v-list-item-icon>
                         <v-list-item-content>
-                            <v-list-item-title @click="item.finished = !finished"> <span :class="{done: item.finished}">{{ item.text }}</span></v-list-item-title>
+                            <v-list-item-title @click="item.finished = !item.finished"> <span :class="{done: item.finished}">{{ item.text }}</span></v-list-item-title>
                         </v-list-item-content>
                         <v-list-item-action>
                             <v-checkbox v-model="item.finished"></v-checkbox>
