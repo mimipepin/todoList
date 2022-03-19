@@ -1,18 +1,17 @@
 <script>
-// give each todo a unique id
-let id = 0
-
+let id = 0;
 export default {
   data() {
     return {
         hide: false,
         newTodo: '',
-        todos: [
-            { id: id++, text: 'Learn HTML', finished:false},
-            { id: id++, text: 'Learn JavaScript', finished:false},
-            { id: id++, text: 'Learn Vue', finished:false}
-        ]
+        todos: []
     }
+  },
+  mounted() {
+      for(let i = 0; i < localStorage.length; i++) {
+          this.todos.push({text: localStorage.key(i), finished: localStorage.getItem(localStorage.key(i))})
+      }
   },
   computed: {
     filteredTodos() {
@@ -22,6 +21,7 @@ export default {
   methods: {
     addTodo() {
         this.todos.push({ id: id++, text: this.newTodo, finished:false})
+        localStorage.setItem(this.newTodo, false)
         this.newTodo = ''
     },
     removeTodo(todo) {
@@ -51,7 +51,7 @@ export default {
         <div v-if="filteredTodos.length > 0">
             <v-list>
                 <v-list-item-group max-width="1000">
-                    <v-list-item v-for="item in filteredTodos" :key="item.id">
+                    <v-list-item v-for="(item,i) in filteredTodos" :key=i>
                         <v-list-item-icon>
                             <v-icon color="#8c1919" @click="removeTodo(item)">mdi-close-thick</v-icon>
                         </v-list-item-icon>
