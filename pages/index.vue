@@ -42,6 +42,10 @@ export default {
             localStorage.setItem(elem.text, elem.finished)
             console.log(localStorage.getItem(elem.text))
         });
+    },
+    removeAll () {
+        localStorage.clear();
+        this.todos = [];
     }
   }
 }
@@ -51,7 +55,7 @@ export default {
     <div>
         <v-btn
             icon>
-            <v-icon>mdi-delete</v-icon>
+            <v-icon @click="removeAll">mdi-delete</v-icon>
         </v-btn>
         <h1>Todo List</h1>
         <form @submit.prevent="addTodo">
@@ -90,6 +94,7 @@ export default {
         </div>
          <div id="hideButton">  
             <v-btn
+                :class="{hidden: todos.length == 0}"
                 @click="hide = !hide"
                 elevation="4"
                 color="#F08080"
@@ -138,6 +143,10 @@ export default {
         display: flex;
         flex-direction: column;
         align-items: center;
+    }
+
+    .hidden {
+        display: none;
     }
 
 
